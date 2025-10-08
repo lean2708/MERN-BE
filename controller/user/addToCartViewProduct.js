@@ -6,8 +6,8 @@ const addToCartViewProduct = async(requestAnimationFrame,res)=>{
         const currnetUser = req.userId
 
         const allProduct = await addToCartModel.find({
-            userId : userId
-        })
+            userId : currnetUser
+        }).populate("productId")
 
         res.json({
             data : allProduct,
