@@ -1,12 +1,14 @@
-const uploadProductPermission = require("../../helpers/permission")
+const checkAdminPermission = require("../../helpers/permission")
 const productModel = require("../../models/productModel")
 
 
 async function uploadProductController(req,res) {
     try {
+        console.log("Create Product")
+
         const sessionUserId = req.userId
 
-        if(!uploadProductPermission(sessionUserId)){
+        if(!checkAdminPermission(sessionUserId)){
             throw new Error("Permission denied")
         }
 

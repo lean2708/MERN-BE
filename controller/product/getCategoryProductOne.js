@@ -3,6 +3,8 @@ const productModel = require("../../models/productModel")
 
 const getCategoryProduct = async (req,res) => {
     try {
+        console.log("Fetch one product per category...")
+
         const productCategory = await productModel.distinct("category")
         console.log("category", productCategory)
 

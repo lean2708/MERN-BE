@@ -1,9 +1,8 @@
-const { request } = require("express")
 const productModel = require("../../models/productModel")
 
 const getCategoryWiseProduct = async (req, res) => {
     try {
-        const {category} = request.body || req?.query
+        const {category} = req?.body || req?.query
         const product = await  productModel.find({category})
 
         res.json({

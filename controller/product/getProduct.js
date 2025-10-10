@@ -1,9 +1,12 @@
+const productModel = require("../../models/productModel")
 
 async function getProductController(req,res) {
     try {
+        console.log("Get All Product")
+
         const allProduct = await productModel.find().sort({createAt : -1})
 
-        req.json({
+        res.json({
             message : "All Product",
             success : true,
             error : false,

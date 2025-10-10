@@ -6,6 +6,8 @@ async function userSignInController(req,res) {
     try {
         const { email, password } = req.body
 
+        console.log("Login for email :", email)
+
         if(!email){
             throw new Error("Please provide email")
         }
@@ -22,11 +24,14 @@ async function userSignInController(req,res) {
         const checkPassword = await bcrypt.compare(password, user.password)
 
         if (checkPassword) {
+            // payload
             const tokenData = {
                 _id : user._id,
                 email : user.email
             }
-            const token = jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 8 });
+
+            // create token (100 gio)
+            const token = jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 100 });
 
             const tokenOption = {
                 httpOnly : true,

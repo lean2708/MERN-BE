@@ -1,16 +1,22 @@
 const addToCartModel = require("../../models/cartProduct")
+const productModel = require("../../models/productModel")
 
 
-const addToCartViewProduct = async(requestAnimationFrame,res)=>{
+const addToCartViewProduct = async(req,res)=>{
     try {
-        const currnetUser = req.userId
+        const currentUser = req.userId
 
+        console.log("Fetch All Cart Item For userId:", currentUser)
+
+        // thay the productId bang du lieu productModel
         const allProduct = await addToCartModel.find({
-            userId : currnetUser
-        }).populate("productId")
+            userId : currentUser
+        });
+
+        const detailItems = await convertCartItems(allProduct);
 
         res.json({
-            data : allProduct,
+            data : detailItems,
             success : true,
             error : false
         })
@@ -23,5 +29,20 @@ const addToCartViewProduct = async(requestAnimationFrame,res)=>{
         })
     }
 }
+
+
+async function convertCartItems(cartItems) {
+    return await Promise.all(
+        cartItems.map(async item => 
+        {
+            const  product = await productModel.findById(item.productId);
+            return {
+                ...item.toObject(),
+                product : product || null
+            };
+        })
+    )
+}
+
 
 module.exports = addToCartViewProduct

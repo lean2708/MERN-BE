@@ -14,7 +14,7 @@ async function authToken(req,res,next) {
         }
 
         jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
-            console.log(err)
+            console.log("Error :",err)
             console.log("decoded", decoded)
 
             if(err){
@@ -23,6 +23,7 @@ async function authToken(req,res,next) {
 
             req.userId = decoded?._id
 
+            next() //  chuyen sang controller
         });
 
 

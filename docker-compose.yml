@@ -1,0 +1,27 @@
+version: "3.9"
+
+
+
+services:
+  mern-be:
+    container_name: mern-be
+    image: lean2708/mern-be:0.0.1
+    ports:
+      - "8080:8080"
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}                 
+      MONGODB_URI: ${MONGODB_URI}   
+      TOKEN_SECRET_KEY: ${TOKEN_SECRET_KEY}
+      FRONTEND_URL: ${FRONTEND_URL}
+    networks:
+      - mern-network
+    restart: always
+
+
+volumes:
+  mongo-data:
+
+networks:
+  mern-network:
+    driver: bridge

@@ -1,11 +1,14 @@
 const productModel = require("../../models/productModel")
 
 
-const searchProduct = async (requestAnimationFrame,res) =>{
+const searchProduct = async (req,res) =>{
     try {
         const query = req.query.q
 
-        const regex = new RegExp(query, i, g)
+        console.log("Searching products with keyword:", query)
+
+        // tao regex tim tat ca khong phan biet hoa thuong
+        const regex = new RegExp(query,'ig')
 
         const product = await productModel.find({
             "$or" : [

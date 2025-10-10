@@ -3,7 +3,10 @@ const bcrypt = require('bcryptjs')
 
 async function userSignUpController(req, res){
     try {
+        // Gan req.body vao cac bien
         const { email, password, name } = req.body
+
+        console.log("Register for email :", email)
 
         const user = await userModel.findOne({email})
 
@@ -35,7 +38,7 @@ async function userSignUpController(req, res){
         }
 
         const userData = new userModel(payload)
-        const saveUser = userData.save()
+        const saveUser = await userData.save()
 
         res.status(201).json({
             data : saveUser, 

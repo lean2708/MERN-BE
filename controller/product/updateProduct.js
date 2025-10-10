@@ -1,16 +1,20 @@
-const uploadProductPermission = require("../../helpers/permission")
+const checkAdminPermission = require("../../helpers/permission")
 const productModel = require("../../models/productModel")
 
 
 async function updateProductController(req,res) {
     try {
-        if(!uploadProductPermission(req.userId)){
+        console.log("Update Product")
+
+        // check authorization
+        if(!checkAdminPermission(req.userId)){
             throw new Error("Permission denied")
         }
 
+        // gan req.body cho cac bien
         const {_id, ...resBody} = req.body
 
-        const updateProduct = await productModel.findByIdAndUpdate(_id, resBody)
+        const updateProduct = await productModel.findByIdAndUpdate(_id, resBody,{new : true})
         
         res.json({
             message : "Product update successfully",

@@ -1,12 +1,15 @@
+const checkAdminPermission = require("../../helpers/permission")
 const userModel = require("../../models/userModel")
 
 async function updateUser(req,res) {
     try {
+        console.log("Update for userId:", req.userId)
+
         const sessionUser = req.userId
 
         const {userId, email, name, role} = req.body
         
-        // nmeu email ton tai thi them email vao object, k thi bo qua
+        // neu email ton tai thi them email vao object, k thi bo qua
         const payload = {
             ...(email && {email : email}),
             ...(name && {name : name}),
@@ -15,11 +18,16 @@ async function updateUser(req,res) {
 
         const user = await userModel.findById(sessionUser)
 
-        console.log("user.role", user.role)
+        if (userId && sessionUser !== userId) {
+            if(!checkAdminPermission(sessionUser)){
+                throw new Error("Permission denied")
+            }
+        }
 
-        const updateUser = await userModel.findByIdAndUpdate(userId, payload)
+        const updateUser = await userModel.findByIdAndUpdate(userId, payload, {new:true})
 
         res.json({
+            data : updateUser,
             message :  "User updated",
             success : true,
             error : false
