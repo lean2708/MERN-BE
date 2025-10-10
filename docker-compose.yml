@@ -1,8 +1,7 @@
 version: "3.9"
 
-
-
 services:
+
   mern-be:
     container_name: mern-be
     image: lean2708/mern-be:0.0.1
@@ -19,8 +18,10 @@ services:
     restart: always
 
 
+
 volumes:
   mongo-data:
+
 
 networks:
   mern-network:
