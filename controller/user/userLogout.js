@@ -1,9 +1,11 @@
 
 async function userLogoutController(req,res) {
     try {
-        console.log("Logout")
+        console.log("Logout request")
     
         res.clearCookies("token")
+
+        console.log("Logout successfully")
 
         res.json({
             message : "Logout successfully",

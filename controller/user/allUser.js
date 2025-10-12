@@ -2,9 +2,11 @@ const userModel = require("../../models/userModel")
 
 async function allUser(req,res) {
     try {
-        console.log("Fetch all users")
+         console.log("Fetch all users request received");
 
         const allUsers = await userModel.find()
+
+        console.log("Successfully fetched all user");
 
         res.json({
             message : "All User",

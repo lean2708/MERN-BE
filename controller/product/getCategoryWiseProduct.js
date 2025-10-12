@@ -3,7 +3,12 @@ const productModel = require("../../models/productModel")
 const getCategoryWiseProduct = async (req, res) => {
     try {
         const {category} = req?.body || req?.query
+
+        console.log("Fetch products by category:", category);
+
         const product = await  productModel.find({category})
+
+        console.log("getCategoryWiseProduct request completed successfully");
 
         res.json({
             data : product,
@@ -11,6 +16,7 @@ const getCategoryWiseProduct = async (req, res) => {
             success : true,
             error : false
         })
+
     } catch (err) {
         res.status(400).json({
             message : err.message || err,

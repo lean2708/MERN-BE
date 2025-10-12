@@ -15,6 +15,8 @@ async function updateProductController(req,res) {
         const {_id, ...resBody} = req.body
 
         const updateProduct = await productModel.findByIdAndUpdate(_id, resBody,{new : true})
+
+        console.log("Update Product successfully — Product ID:", _id, ", updated by user:", req.userId)
         
         res.json({
             message : "Product update successfully",

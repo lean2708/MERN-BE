@@ -6,7 +6,7 @@ async function userSignUpController(req, res){
         // Gan req.body vao cac bien
         const { email, password, name } = req.body
 
-        console.log("Register for email :", email)
+        console.log("Register request recive for email :", email)
 
         const user = await userModel.findOne({email})
 
@@ -40,11 +40,13 @@ async function userSignUpController(req, res){
         const userData = new userModel(payload)
         const saveUser = await userData.save()
 
+        console.log("User created successfully:", saveUser.email);
+
         res.status(201).json({
             data : saveUser, 
             siccess : true,
             error : false,
-            message : "User created Successfully!"
+            message : "User created successfully!"
         })
         
     } catch (err) {

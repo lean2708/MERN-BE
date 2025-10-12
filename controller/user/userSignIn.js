@@ -6,7 +6,7 @@ async function userSignInController(req,res) {
     try {
         const { email, password } = req.body
 
-        console.log("Login for email :", email)
+        console.log("Login request receive for email :", email)
 
         if(!email){
             throw new Error("Please provide email")
@@ -37,6 +37,8 @@ async function userSignInController(req,res) {
                 httpOnly : true,
                 secure : user.email
             }
+
+            console.log("Login Successfully :", email)
 
             res.cookie("token", token, tokenOption).json({
                 message : "Login successfully",

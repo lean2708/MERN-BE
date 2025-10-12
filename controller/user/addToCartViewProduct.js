@@ -15,6 +15,8 @@ const addToCartViewProduct = async(req,res)=>{
 
         const detailItems = await convertCartItems(allProduct);
 
+        console.log("Cart details fetched successfully for user:", currentUser);
+
         res.json({
             data : detailItems,
             success : true,

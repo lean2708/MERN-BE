@@ -19,6 +19,8 @@ const getCategoryProduct = async (req,res) => {
             }
         }
 
+        console.log("getCategoryProduct request completed successfully");
+
         res.json({
             message : "category product",
             data : productByCategory,

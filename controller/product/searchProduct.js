@@ -10,6 +10,7 @@ const searchProduct = async (req,res) =>{
         // tao regex tim tat ca khong phan biet hoa thuong
         const regex = new RegExp(query,'ig')
 
+        // tim product co name hoac category nhu regex
         const product = await productModel.find({
             "$or" : [
                 {
@@ -20,6 +21,9 @@ const searchProduct = async (req,res) =>{
                 }
             ]
         })
+
+        console.log("Search Product successfully. Found:", product.length, " results for keyword:", query)
+
 
         res.json({
             data : product,

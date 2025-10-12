@@ -9,6 +9,8 @@ const getProductDetails = async (req,res) => {
 
         const product = await productModel.findById(productId)
 
+         console.log("Fetch Product Details completed successfully for ID:", productId)
+
         res.json({
             data : product,
             message : "Ok",

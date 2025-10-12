@@ -15,12 +15,15 @@ async function uploadProductController(req,res) {
         const uploadProduct = new productModel(req.body)
         const saveProduct = await uploadProduct.save()
 
+         console.log("Upload Product successfully — Product ID:", saveProduct._id, "uploaded by user:", sessionUserId)
+
         res.status(201).json({
             message : "Product upload successfully",
             error : false,
             success : true,
             data : saveProduct
         })
+
     } catch (err) {
         res.status(400).json({
             message : err.message || err,

@@ -37,7 +37,9 @@ const addToCartController = async (req,res) =>{
             message : "Product Added In Cart",
             success : true,
             error : false
-        })
+        });
+
+        console.log("Product ", productId, " added successfully to user ", currentUser, " cart");
 
     } catch (err) {
         res.json({

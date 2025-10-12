@@ -3,7 +3,7 @@ const userModel = require("../../models/userModel")
 
 async function updateUser(req,res) {
     try {
-        console.log("Update for userId:", req.userId)
+        console.log("Update request for userId:", req.userId)
 
         const sessionUser = req.userId
 
@@ -25,6 +25,8 @@ async function updateUser(req,res) {
         }
 
         const updateUser = await userModel.findByIdAndUpdate(userId, payload, {new:true})
+
+        console.log("Update user successfully:", updateUser)
 
         res.json({
             data : updateUser,

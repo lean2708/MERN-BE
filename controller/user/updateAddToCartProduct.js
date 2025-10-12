@@ -6,7 +6,7 @@ const updateAddToCartProduct = async (req,res)=>{
         const currentUserId = req.userId
         const addToCartProductId = req?.body?._id
 
-        console.log("Update CartItem by cartId:", addToCartProductId)
+        console.log("Update CartItem request for cartId:", addToCartProductId)
 
         const qty = req.body.quantity
 
@@ -14,6 +14,8 @@ const updateAddToCartProduct = async (req,res)=>{
             {_id : addToCartProductId}, 
             {...(qty && {quantity : qty})}
         )
+
+        console.log("Update Cart Item successfully for cartId:", addToCartProductId)
 
         res.json({
             message  : "Product Updated",
