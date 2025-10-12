@@ -28,6 +28,8 @@ async function authToken(req,res,next) {
 
 
     } catch (err) {
+         console.log("authToken ERROR:", err.message);
+         
         res.status(400).json({
             message : err.message || err,
             data : [],
