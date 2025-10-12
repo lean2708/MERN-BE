@@ -40,9 +40,11 @@ const addToCartController = async (req,res) =>{
             success : true,
             error : false
         });
-        
+
 
     } catch (err) {
+        console.log("AddToCartController ERROR:", err.message)
+        
         res.json({
             message : err.message || err,
             error : true,

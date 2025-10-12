@@ -25,6 +25,8 @@ const updateAddToCartProduct = async (req,res)=>{
         })
 
     } catch (err) {
+        console.log("UpdateAddToCartProduct Controller ERROR:", err.message)
+        
         res.json({
             message : err.message || err,
             error : true,

@@ -19,6 +19,8 @@ const deleteAddToCartProduct = async(req,res) => {
         })
 
     } catch (err) {
+        console.log("DeleteAddToCartProduct Controller ERROR:", err.message)
+        
         res.json({
             message : err.message || err,
             error : true,

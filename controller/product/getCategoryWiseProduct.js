@@ -18,6 +18,8 @@ const getCategoryWiseProduct = async (req, res) => {
         })
 
     } catch (err) {
+        console.log("GetCategoryWiseProduct Controller ERROR:", err.message)
+
         res.status(400).json({
             message : err.message || err,
             error : true,

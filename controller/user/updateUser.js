@@ -36,6 +36,8 @@ async function updateUser(req,res) {
         })
 
     } catch (err) {
+        console.log("UpdateUser Controller ERROR:", err.message)
+        
         res.status(400).json({
             message : err.message || err,
             error : true,

@@ -52,6 +52,8 @@ async function userSignInController(req,res) {
         }
         
     } catch (err) {
+        console.log("UserSignIn Controller ERROR:", err.message)
+
         res.json({
             message : err.message || err,
             error : true,

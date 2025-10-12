@@ -22,6 +22,8 @@ const countAddToCartProduct = async (req,res) =>{
         })
 
     } catch (err) {
+         console.log("CountAddToCartProduct Controller ERROR:", err.message)
+         
         res.json({
             message : err.message || err,
             error : true,

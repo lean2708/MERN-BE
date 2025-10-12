@@ -24,6 +24,8 @@ const addToCartViewProduct = async(req,res)=>{
         })
 
     } catch (err) {
+        console.log("AddToCartViewProduct Controller ERROR:", err.message)
+        
         res.json({
             message : err.message || err,
             error : true,

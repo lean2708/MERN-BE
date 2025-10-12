@@ -24,6 +24,8 @@ const filterProductController = async (req,res)=>{
         })
 
     } catch (err) {
+        console.log("FilterProduct Controller ERROR:", err.message) 
+
         res.json({
             message : err.message || err,
             error : true,
