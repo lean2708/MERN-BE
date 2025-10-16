@@ -1,4 +1,4 @@
-const productModel = require("../../models/productModel")
+const productModel = require("../../model/productModel")
 
 
 const searchProduct = async (req,res) =>{
@@ -33,7 +33,10 @@ const searchProduct = async (req,res) =>{
         })
 
     } catch (err) {
-        console.log("SearchProduct Controller ERROR:", err.message)
+        console.log("SearchProduct Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.json({
             message : err.message || err,

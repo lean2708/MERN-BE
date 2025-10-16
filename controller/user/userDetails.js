@@ -1,4 +1,4 @@
-const userModel = require("../../models/userModel")
+const userModel = require("../../model/userModel")
 
 async function userDetailsController(req,res) {
     try {
@@ -16,7 +16,10 @@ async function userDetailsController(req,res) {
         })
 
     } catch (err) {
-        console.log("UserDetails Controller ERROR:", err.message)
+        console.log("UserDetails Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.status(400).json({
             message : err.message || err,

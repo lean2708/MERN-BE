@@ -1,4 +1,4 @@
-const addToCartModel = require("../../models/cartProduct")
+const addToCartModel = require("../../model/cartProduct")
 
 const deleteAddToCartProduct = async(req,res) => {
     try {
@@ -19,7 +19,10 @@ const deleteAddToCartProduct = async(req,res) => {
         })
 
     } catch (err) {
-        console.log("DeleteAddToCartProduct Controller ERROR:", err.message)
+        console.log("DeleteAddToCartProduct Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
         
         res.json({
             message : err.message || err,

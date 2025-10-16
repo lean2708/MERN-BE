@@ -1,4 +1,4 @@
-const productModel = require("../../models/productModel")
+const productModel = require("../../model/productModel")
 
 
 const getProductDetails = async (req,res) => {
@@ -19,7 +19,10 @@ const getProductDetails = async (req,res) => {
         })
 
     } catch (err) {
-        console.log("GetProductDetails Controller ERROR:", err.message)
+        console.log("GetProductDetails Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.status(400).json({
             message : err.message || err,

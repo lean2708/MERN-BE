@@ -4,7 +4,7 @@ const express = require("express")
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
 const connectDB = require('./config/db')
-const router = require('./routes/index')
+const router = require('./route/index')
 const swaggerUi = require("swagger-ui-express")
 const swaggerSpec = require("./swagger")
 

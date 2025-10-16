@@ -1,4 +1,4 @@
-const userModel = require("../../models/userModel")
+const userModel = require("../../model/userModel")
 const bcrypt = require('bcryptjs')
 
 async function userSignUpController(req, res){
@@ -50,7 +50,10 @@ async function userSignUpController(req, res){
         })
         
     } catch (err) {
-         console.log("UserSignUp Controller ERROR:", err.message)
+         console.log("UserSignUp Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.json({
             message : err.message || err,

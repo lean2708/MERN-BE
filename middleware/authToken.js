@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 async function authToken(req,res,next) {
     try {
+        // Get token from cookie or header Authorization
         const token = req.cookies?.token || req.headers['authorization']
 
         if(!token){
@@ -13,19 +14,18 @@ async function authToken(req,res,next) {
             })
         }
 
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
-            console.log("Error :",err)
-            console.log("decoded", decoded)
+        // Verify Token
+        const decoded = verifyToken(token);
 
-            if(err){
-                console.log("error auth", err)
-            }
+        if (!decoded?._id) {
+            throw new Error("Invalid token structure");
+        }
 
-            req.userId = decoded?._id
+        console.log("decoded", decoded)
 
-            next() //  chuyen sang controller
-        });
+        req.userId = decoded._id;
 
+        next();
 
     } catch (err) {
          console.log("authToken ERROR:", err.message);

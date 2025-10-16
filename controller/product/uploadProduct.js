@@ -1,5 +1,5 @@
 const checkAdminPermission = require("../../helpers/permission")
-const productModel = require("../../models/productModel")
+const productModel = require("../../model/productModel")
 
 
 async function uploadProductController(req,res) {
@@ -25,7 +25,10 @@ async function uploadProductController(req,res) {
         })
 
     } catch (err) {
-        console.log("UploadProduct Controller ERROR:", err.message)
+        console.log("UploadProduct Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.status(400).json({
             message : err.message || err,

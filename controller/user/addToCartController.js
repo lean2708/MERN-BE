@@ -1,4 +1,4 @@
-const addToCartModel = require("../../models/cartProduct")
+const addToCartModel = require("../../model/cartProduct")
 
 
 const addToCartController = async (req,res) =>{
@@ -43,7 +43,10 @@ const addToCartController = async (req,res) =>{
 
 
     } catch (err) {
-        console.log("AddToCartController ERROR:", err.message)
+        console.log("AddToCartController ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
         
         res.json({
             message : err.message || err,

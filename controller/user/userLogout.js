@@ -15,7 +15,10 @@ async function userLogoutController(req,res) {
         })
 
     } catch (err) {
-        console.log("UserLogout Controller ERROR:", err.message)
+        console.log("UserLogout Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
         
         res.json({
             message : err.message || err,

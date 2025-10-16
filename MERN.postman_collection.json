@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "user",
+			"name": "Auth",
 			"item": [
 				{
 					"name": "Login",
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"test@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n  \"email\": \"lean270804@gmail.com\",\r\n  \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"name\": \"Le Van An\",\r\n  \"email\": \"lean2708@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+							"raw": "{\r\n  \"name\": \"Le Van An\",\r\n  \"email\": \"lean270804@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -61,6 +61,65 @@
 					"response": []
 				},
 				{
+					"name": "ForgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lean270804@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/forgot-password"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lean270804@gmail.com\",\r\n    \"otp\": 123456\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/forgot-password/verify-otp"
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lean270804@gmail.com\",\r\n    \"resetToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGVkYmVhMzlhYWY5YTdlNmZkZWYxNmMiLCJlbWFpbCI6ImxlYW4yNzA4MDRAZ21haWwuY29tIiwiaWF0IjoxNzYwNTg1MDkwLCJleHAiOjE3NjA1ODU2OTB9.qj6vLp2NRdQ2T99l5-0zCGK4DozAlLlEVpdw4adYRRw\",\r\n    \"newPassword\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/forgot-password/reset-password"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
 					"name": "Get user details",
 					"request": {
 						"auth": {
@@ -73,7 +132,7 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGRmM2Y0ZDA3NDliZmJlNDI5MTYyZWQiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNzU5OTc2ODU2LCJleHAiOjE3NjAwMDU2NTZ9.DN93h88yZdNoKOayInzNcfN-Ys32yo-z9KroL_2jhbs",
+								"value": "",
 								"type": "text",
 								"disabled": true
 							}

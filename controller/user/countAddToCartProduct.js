@@ -1,4 +1,4 @@
-const addToCartModel = require("../../models/cartProduct")
+const addToCartModel = require("../../model/cartProduct")
 
 const countAddToCartProduct = async (req,res) =>{
     try {
@@ -22,8 +22,11 @@ const countAddToCartProduct = async (req,res) =>{
         })
 
     } catch (err) {
-         console.log("CountAddToCartProduct Controller ERROR:", err.message)
-         
+         console.log("CountAddToCartProduct Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
         res.json({
             message : err.message || err,
             error : true,

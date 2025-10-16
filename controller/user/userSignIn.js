@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
-const userModel = require("../../models/userModel")
+const userModel = require("../../model/userModel")
+const { generateToken } = require('../../service/jwtService')
 jwt = require('jsonwebtoken')
 
 async function userSignInController(req,res) {
@@ -24,14 +25,9 @@ async function userSignInController(req,res) {
         const checkPassword = await bcrypt.compare(password, user.password)
 
         if (checkPassword) {
-            // payload
-            const tokenData = {
-                _id : user._id,
-                email : user.email
-            }
 
-            // create token (100 gio)
-            const token = jwt.sign(tokenData, process.env.TOKEN_SECRET_KEY, { expiresIn: 60 * 60 * 100 });
+            // create token 
+            const token = generateToken(user._id, email, parseInt(process.env.TOKEN_EXPIRE) * 60);
 
             const tokenOption = {
                 httpOnly : true,
@@ -52,7 +48,10 @@ async function userSignInController(req,res) {
         }
         
     } catch (err) {
-        console.log("UserSignIn Controller ERROR:", err.message)
+        console.log("UserSignIn Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
 
         res.json({
             message : err.message || err,

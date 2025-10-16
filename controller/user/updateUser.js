@@ -1,5 +1,5 @@
 const checkAdminPermission = require("../../helpers/permission")
-const userModel = require("../../models/userModel")
+const userModel = require("../../model/userModel")
 
 async function updateUser(req,res) {
     try {
@@ -36,7 +36,10 @@ async function updateUser(req,res) {
         })
 
     } catch (err) {
-        console.log("UpdateUser Controller ERROR:", err.message)
+        console.log("UpdateUser Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
         
         res.status(400).json({
             message : err.message || err,
