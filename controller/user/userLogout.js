@@ -3,7 +3,7 @@ async function userLogoutController(req,res) {
     try {
         console.log("Logout request")
     
-        res.clearCookies("token")
+        res.clearCookie("token")
 
         console.log("Logout successfully")
 
