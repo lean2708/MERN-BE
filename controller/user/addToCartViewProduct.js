@@ -12,6 +12,7 @@ const addToCartViewProduct = async(req,res)=>{
         const allProduct = await addToCartModel.find({
             userId : currentUser
         });
+        
 
         const detailItems = await convertCartItems(allProduct);
 
