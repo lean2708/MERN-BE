@@ -6,11 +6,6 @@ const { generateToken, verifyToken } = require('../service/jwtService');
 const { sendOtpForgotPassowrd } = require("../service/emailService");
 
 
-
-
-
-
-
 const authController = {
 
     
