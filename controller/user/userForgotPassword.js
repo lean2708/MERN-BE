@@ -8,6 +8,8 @@ async function forgotPassword(req,res) {
     try {
         const { email } = req.body;
 
+        console.log("Forgot Password request received for email:", email);
+
         if(!email){
             throw new Error("Please provide email")
         }
@@ -36,6 +38,8 @@ async function forgotPassword(req,res) {
         // Send email
         await sendOtpForgotPassowrd(email, user.name, otp, process.env.OTP_EXPIRE)
 
+        console.log("Forgot Password OTP sent successfully to:", email);
+
         return res.json({
            message: "OTP đã được gửi đến email của bạn",
           success: true,
@@ -61,6 +65,8 @@ async function verifyOtp(req, res) {
     try {
         const { email, otp } = req.body;
 
+        console.log("Verify OTP request received for email:", email, "OTP:", otp);
+
         if (!email || !otp) throw new Error("Missing email or OTP");
 
         const record = await passwordReset.findOne({ email });
@@ -81,6 +87,8 @@ async function verifyOtp(req, res) {
 
         // Generate token
         const resetToken = generateToken(user._id, email, parseInt(process.env.TOKEN_EXPIRE) * 60)
+
+        console.log("OTP verified successfully for:", email);
 
         return res.json({
            message: "Xác thực OTP thành công",
@@ -108,6 +116,8 @@ async function resetPassword(req, res) {
     try {
         const { email, resetToken, newPassword, confirmPassword } = req.body;
 
+        console.log("Reset Password request received for email:", email);
+
         if (!email || !resetToken || !newPassword || !confirmPassword) {
            throw new Error("Missing required fields (email, token, newPassword, confirmPassword)");
         }
@@ -129,6 +139,8 @@ async function resetPassword(req, res) {
        await userModel.updateOne({ email }, { password: hashedPassword });
 
        await passwordReset.deleteMany({ email });
+
+       console.log("Password reset successfully for:", email);
 
        return res.json({
         message: "Đặt lại mật khẩu thành công",

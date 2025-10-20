@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const qs = require('qs');
 const { format } = require('date-fns');
 
-// Hàm sắp xếp object theo key alphabet
+// Sort object 
 function sortObject(obj) {
     let sorted = {};
     let str = [];
@@ -19,11 +19,8 @@ function sortObject(obj) {
     return sorted;
 }
 
-/**
- *  Tạo URL thanh toán VNPAY
- */
+// Create URL VNPAY
 const createPaymentUrl = (req, order) => {
-    // Lấy các biến môi trường
     const tmnCode = process.env.VNP_TMNCODE;
     const secretKey = process.env.VNP_HASHSECRET;
     let vnpUrl = process.env.VNP_URL;
@@ -36,8 +33,9 @@ const createPaymentUrl = (req, order) => {
         (req.connection.socket ? req.connection.socket.remoteAddress : null);
 
     const createDate = format(new Date(), 'yyyyMMddHHmmss');
-    const orderId = order._id.toString(); // Dùng _id của Mongoose làm mã đơn hàng
-    const amount = order.totalPrice * 100; // VNPAY yêu cầu nhân 100
+    const orderId = order._id.toString(); 
+
+    const amount = order.totalPrice * 100; 
     const orderInfo = `Thanh toan don hang: ${orderId}`;
     
     let vnp_Params = {};
@@ -58,38 +56,17 @@ const createPaymentUrl = (req, order) => {
     vnp_Params = sortObject(vnp_Params);
     const signData = qs.stringify(vnp_Params, { encode: false });
 
-    // Tạo chữ ký bảo mật (secure hash)
+    // Create secure hash
     const hmac = crypto.createHmac("sha512", secretKey);
     const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
     vnp_Params['vnp_SecureHash'] = signed;
 
-    // Tạo URL cuối cùng
-    vnpUrl += '?' + qs.stringify(vnp_Params, { encode: true });
+    // Create URL final
+    vnpUrl += '?' + qs.stringify(vnp_Params, { encode: false });
     return vnpUrl;
 };
 
-const verifyReturnUrl = (vnp_Params) => {
-    const secretKey = process.env.VNP_HASHSECRET;
-    const secureHash = vnp_Params['vnp_SecureHash'];
-
-    // Xóa trường vnp_SecureHash và vnp_SecureHashType để tạo lại hash
-    delete vnp_Params['vnp_SecureHash'];
-    delete vnp_Params['vnp_SecureHashType'];
-
-    // Sắp xếp và tạo chuỗi query
-    vnp_Params = sortObject(vnp_Params);
-    const signData = qs.stringify(vnp_Params, { encode: false });
-
-    // Tạo lại chữ ký
-    const hmac = crypto.createHmac("sha512", secretKey);
-    const signed = hmac.update(Buffer.from(signData, 'utf-8')).digest("hex");
-
-    // So sánh chữ ký
-    return secureHash === signed;
-};
-
 module.exports = {
-    createPaymentUrl,
-    verifyReturnUrl
+    createPaymentUrl
 };
 

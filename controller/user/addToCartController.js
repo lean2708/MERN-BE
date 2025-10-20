@@ -1,4 +1,5 @@
 const addToCartModel = require("../../model/cartProduct")
+const productModel = require("../../model/productModel")
 
 
 const addToCartController = async (req,res) =>{
@@ -20,7 +21,7 @@ const addToCartController = async (req,res) =>{
         // Check exits in cart
         const isProductAvailable = await addToCartModel.findOne({
             productId: productId,
-            userId: userId
+            userId: currentUser
         });
 
         if(isProductAvailable){
@@ -34,7 +35,7 @@ const addToCartController = async (req,res) =>{
         const payload = {
             productId: productId,
             quantity: 1, 
-            userId: userId
+            userId: currentUser
         };
 
         const newAddToCart = new addToCartModel(payload);

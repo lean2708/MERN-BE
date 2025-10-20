@@ -9,6 +9,8 @@ const createOrder = async (req, res) => {
         const userId = req.userId;
         const { shippingAddressId, paymentMethod, products } = req.body;
 
+        console.log("Create Order request received for user:", userId, "Payment:", paymentMethod);
+
         if (!shippingAddressId || !paymentMethod) {
             throw Error("Provide shippingAddressId and paymentMethod");
         }
@@ -60,6 +62,8 @@ const createOrder = async (req, res) => {
 
         // Create payment URL if payment method is VNPAY
         if (order.paymentMethod === 'CASH') {
+            console.log("Order (CASH) created successfully for user:", userId, "OrderId:", order._id);
+
             res.status(201).json({
             data : order, 
             success : true,
@@ -69,6 +73,9 @@ const createOrder = async (req, res) => {
 
         } else if (order.paymentMethod === 'VNPAY') {
             const paymentUrl = vnpayService.createPaymentUrl(req, order);
+
+            console.log("Order (VNPAY) created for user:", userId, "OrderId:", order._id, "Redirecting to VNPAY.");
+
             res.status(201).json({
             data : order, 
             success : true,
@@ -96,6 +103,8 @@ const getMyOrdersByStatus = async (req, res) => {
         const userId = req.userId;
         const { status } = req.query; 
 
+        console.log("Get My Orders request received for user:", userId, "Status:", status);
+
         if (!status) {
             throw new Error("Provide status order");
         }
@@ -110,6 +119,8 @@ const getMyOrdersByStatus = async (req, res) => {
             user: userId, 
             orderStatus: status 
         }).sort({ createdAt: -1 });
+
+        console.log("Fetched", orders.length, "orders with status", status, "for user:", userId);
 
         res.status(201).json({
             data : orders, 
@@ -138,6 +149,8 @@ const getOrderById = async (req, res) => {
         const userId = req.userId;
         const orderId = req.params.id;
 
+        console.log("Get Order By Id request received for user:", userId, "OrderId:", orderId);
+
         const order = await orderModel.findById(orderId)
             .populate('orderItems.product')
             .populate('shippingAddress');
@@ -148,6 +161,8 @@ const getOrderById = async (req, res) => {
         if (order.user.toString() !== userId) {
             throw new Error("You are not authorized to view this order");
         }
+
+        console.log("Fetched order details successfully for user:", userId, "OrderId:", orderId);
 
         res.status(200).json({
             data : order, 
@@ -177,6 +192,8 @@ const cancelOrder = async (req, res) => {
         const orderId = req.params.id;
         const order = await orderModel.findById(orderId);
 
+        console.log("Cancel Order request received for user:", userId, "OrderId:", orderId);
+
         if (!order) {
             throw Error("Order not exists");
         }
@@ -189,6 +206,8 @@ const cancelOrder = async (req, res) => {
 
         order.orderStatus = 'CANCELLED';
         await order.save();
+
+        console.log("Order cancelled successfully for user:", userId, "OrderId:", orderId);
 
         res.status(200).json({
             data : order, 
@@ -210,64 +229,74 @@ const cancelOrder = async (req, res) => {
         })
     }
 };
+
+
 const vnpayReturn = async (req, res) => {
-    try { // <-- FIX 1: Thêm khối try
-        const vnp_Params = req.query;
+    try {
+        const vnp_Params = req.query; 
+
         const responseCode = vnp_Params['vnp_ResponseCode'];
-        
-        // <-- FIX 4 (Đề xuất): Dùng vnp_TxnRef làm mã đơn hàng
-        // Đây là tham số chuẩn của VNPAY cho mã giao dịch của merchant
-        const orderId = vnp_Params['vnp_TxnRef']; 
+        const orderId = vnp_Params['vnp_TxnRef'];
 
-        // Nếu bạn chắc chắn bạn đã tự truyền 'orderId' vào returnUrl, thì giữ dòng dưới
-        // const orderId = vnp_Params['orderId']; 
+        console.log("VNPAY Return request received. TxnRef:", orderId, "ResponseCode:", responseCode);
 
-        const isVerified = vnpayService.verifyReturnUrl(vnp_Params);
-        
-        const frontendSuccessUrl = `${process.env.FRONTEND_URL}/payment-success?orderId=${orderId}`;
-        const frontendFailUrl = `${process.env.FRONTEND_URL}/payment-fail?orderId=${orderId}`;
-
-        if (isVerified) {
-            if (responseCode === '00') {
-                // <-- FIX 3: Kiểm tra trạng thái đơn hàng trước khi cập nhật
-                const order = await orderModel.findById(orderId);
-
-                // Giả sử trạng thái ban đầu là 'PENDING'.
-                // Chỉ cập nhật nếu đơn hàng tồn tại và đang ở trạng thái 'PENDING'.
-                if (order && order.orderStatus === 'PENDING') {
-                    await orderModel.findByIdAndUpdate(orderId, {
-                        paidAt: new Date(),
-                        orderStatus: 'PROCESSING' // Hoặc 'PAID'
-                    });
-                }
-                // Nếu đơn hàng đã được xử lý rồi (không còn là PENDING) thì cứ redirect về success
-                return res.redirect(frontendSuccessUrl);
-
-            } else {
-                // Thanh toán thất bại (lỗi từ VNPAY, ví dụ: thiếu tiền, hủy giao dịch)
-                return res.redirect(frontendFailUrl);
-            }
-        } else {
-            // <-- FIX 2: Xử lý trường hợp chữ ký không hợp lệ
-            console.log("VNPAY Return URL verification failed: Signature mismatch.");
-            return res.redirect(frontendFailUrl);
+        // find order by Id
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+           throw new Error("Order not exists");
         }
 
-    } catch (err) { // <-- FIX 1: Khối catch bây giờ đã hợp lệ
-        // <-- FIX 5: Sửa lại nội dung log
-        console.log("VNPAY Return Controller ERROR:", {
+        // Handle payment result
+        if (responseCode === '00') {
+            if (order.orderStatus === 'PENDING') {
+                await orderModel.findByIdAndUpdate(orderId, {
+                    paidAt: new Date(),
+                    orderStatus: 'PROCESSING'
+                });
+                
+                const updatedOrder = await orderModel.findById(orderId);
+
+                console.log("VNPAY payment successful and order updated:", orderId);
+                
+                return res.status(200).json({
+                    success: true,
+                    error : false,
+                    message: "Thanh toán thành công!",
+                    data: updatedOrder
+                });
+            } else {
+                console.log("VNPAY payment successful (already processed):", orderId);
+                
+                return res.status(200).json({
+                    success: false,
+                    error : true,
+                    message: "Giao dịch đã được ghi nhận trước đó.",
+                    data: order
+                });
+            }
+        } else {
+            return res.status(400).json({
+                success: false,
+                eror : true,
+                message: `Thanh toán thất bại (Mã lỗi VNPAY: ${responseCode})`,
+                data: order 
+            });
+        }
+
+    } catch (err) {
+        console.log("VNPAY Check Return Controller ERROR:", {
             message: err.message,
             stack: err.stack
         });
         
-        // Khi có lỗi server 500, nên trả về JSON thay vì redirect
-        res.status(500).json({
-            message : err.message || "Internal Server Error",
+        res.json({
+            message : err.message || err,
             error : true,
             success : false
-        });
+        })
     }
 };
+
 
 
 

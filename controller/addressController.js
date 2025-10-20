@@ -3,8 +3,11 @@ const addressModel = require("../model/address");
 
 const createAddress = async (req, res) => {
     try {
+        
         const userId = req.userId; 
         const { phone, addressDetail, isDefault } = req.body;
+
+        console.log("Create Address request received for user:", userId);
 
         if (!phone || !addressDetail) {
             return res.status(400).json({ message: "Provide phone and address detail." });
@@ -18,6 +21,8 @@ const createAddress = async (req, res) => {
         });
 
         const savedAddress = await newAddress.save();
+
+        console.log("Address created successfully for user:", userId, "AddressId:", savedAddress._id);
 
         res.status(201).json({
             data : savedAddress, 
@@ -45,9 +50,13 @@ const getUserAddresses = async (req, res) => {
     try {
         const userId = req.userId; 
 
+        console.log("Get User Addresses request received for user:", userId);
+
         // Sắp xếp để địa chỉ "mặc định" (isDefault: true) luôn ở trên cùng
         const addresses = await addressModel.find({ user: userId })
                                             .sort({ isDefault: -1, updatedAt: -1 });
+
+        console.log("Addresses fetched successfully for user:", userId);
 
         res.status(200).json({
             data : addresses, 
@@ -78,6 +87,8 @@ const updateAddress = async (req, res) => {
         const addressId = req.params.id;
         const { phone, addressDetail, isDefault } = req.body;
 
+        console.log("Update Address request received for user:", userId, "AddressId:", addressId);
+
         const address = await addressModel.findById(addressId);
 
         if (!address) {
@@ -98,6 +109,8 @@ const updateAddress = async (req, res) => {
         }
 
         const updatedAddress = await address.save();
+
+        console.log("Address updated successfully for user:", userId, "AddressId:", updatedAddress._id);
 
         res.status(200).json({
             data : updatedAddress, 
@@ -126,6 +139,8 @@ const deleteAddress = async (req, res) => {
         const userId = req.userId; 
         const addressId = req.params.id;
 
+        console.log("Delete Address request received for user:", userId, "AddressId:", addressId);
+
         const deletedAddress = await addressModel.findOneAndDelete({
             _id: addressId,
             user: userId
@@ -134,6 +149,8 @@ const deleteAddress = async (req, res) => {
         if (!deletedAddress) {
             throw new Error("Address not exists");
         }
+
+        console.log("Address deleted successfully for user:", userId, "AddressId:", addressId);
 
         res.status(200).json({
             success : true,

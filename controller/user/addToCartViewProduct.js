@@ -9,7 +9,7 @@ const addToCartViewProduct = async(req,res)=>{
         console.log("Fetch All Cart Item For userId:", currentUser)
 
         const cartProducts = await addToCartModel.find({
-            userId: userId
+            userId: currentUser
         }).populate('productId');
 
         console.log("Cart details fetched successfully for user:", currentUser);
@@ -35,18 +35,6 @@ const addToCartViewProduct = async(req,res)=>{
 }
 
 
-async function convertCartItems(cartItems) {
-    return await Promise.all(
-        cartItems.map(async item => 
-        {
-            const  product = await productModel.findById(item.productId);
-            return {
-                ...item.toObject(),
-                product : product || null
-            };
-        })
-    )
-}
 
 
 module.exports = addToCartViewProduct
