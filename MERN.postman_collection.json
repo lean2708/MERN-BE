@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"lean270804@gmail.com\",\r\n  \"password\": \"\"\r\n}",
+							"raw": "{\r\n  \"email\": \"lean270804@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -132,7 +132,7 @@
 						"header": [
 							{
 								"key": "token",
-								"value": "",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGRmM2Y0ZDA3NDliZmJlNDI5MTYyZWQiLCJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiaWF0IjoxNzU5OTc2ODU2LCJleHAiOjE3NjAwMDU2NTZ9.DN93h88yZdNoKOayInzNcfN-Ys32yo-z9KroL_2jhbs",
 								"type": "text",
 								"disabled": true
 							}
@@ -349,7 +349,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"productId\": \"670a13dfe32a7f29fbd1e8d1\"\r\n}\r\n",
+							"raw": "{\r\n  \"productId\": \"68ebb7ad42121d51e89ad61a\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -435,6 +435,232 @@
 							}
 						},
 						"url": "http://localhost:8080/api/delete-cart-product"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Create Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"0987654321\",\n    \"addressDetail\": \"123 Đường ABC, Phường 1, Quận 2, TP. HCM\",\n    \"isDefault\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/address",
+						"description": "Tạo một địa chỉ mới cho user đã đăng nhập. Tự động lưu ID của địa chỉ này vào biến `addressId`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All List Address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/address",
+						"description": "Lấy tất cả địa chỉ của user đã đăng nhập. Địa chỉ default sẽ được ưu tiên lên đầu."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address By Address Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"phone\": \"0123456789\",\n    \"addressDetail\": \"456 Đường XYZ, Phường 3, Quận 4, Hà Nội\",\n    \"isDefault\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/address/{{addressId}}",
+						"description": "Cập nhật địa chỉ có ID được lưu trong biến `addressId`. Hãy chạy request 'Tạo địa chỉ mới' trước."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/api/address/{{addressId}}",
+						"description": "Xóa địa chỉ có ID được lưu trong biến `addressId`. Hãy chạy request 'Tạo địa chỉ mới' trước."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "1. Create New Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shippingAddressId\": \"68f5a44ddbd1db1f8a8565e7\",\n    \"paymentMethod\": \"CASH\",\n    \"products\": [\n        {\n            \"productId\": \"68f5a444dbd1db1f8a8565e3\",\n            \"quantity\": 2\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/order",
+						"description": "Tạo một đơn hàng mới. API này xử lý cả 'Mua Ngay' và 'Đặt hàng từ giỏ'.\n\n**BẮT BUỘC:** Bạn phải thay thế giá trị cho biến `addressId` và `productId` trong tab 'Variables' của Collection trước khi chạy."
+					},
+					"response": []
+				},
+				{
+					"name": "2. Get My Orders by Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/order/by-status?status=PENDING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order",
+								"by-status"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						},
+						"description": "Lấy danh sách các đơn hàng của bạn theo một trạng thái cụ thể. Bạn có thể thay đổi giá trị `status` trong 'Params' (pending, processing, delivered, etc.)."
+					},
+					"response": []
+				},
+				{
+					"name": "3. Get Order Details (uses ID from Create)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/order/68f5a51e0f77eedccc495d61",
+						"description": "Lấy thông tin chi tiết của đơn hàng vừa được tạo. Hãy chạy request '1. Create New Order' trước để biến `orderId` được tự động lưu lại."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Cancel Order (uses ID from Create)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": "http://localhost:8080/api/order/68f5a484dbd1db1f8a8565ef/cancel",
+						"description": "Hủy đơn hàng vừa được tạo (chỉ hoạt động khi trạng thái là 'pending'). Hãy chạy request '1. Create New Order' trước."
+					},
+					"response": []
+				},
+				{
+					"name": "VNPAY Return (Callback Simulation)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/order/vnpay_return?vnp_ResponseCode=00&vnp_TxnRef=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"order",
+								"vnpay_return"
+							],
+							"query": [
+								{
+									"key": "vnp_ResponseCode",
+									"value": "00"
+								},
+								{
+									"key": "vnp_TxnRef",
+									"value": ""
+								}
+							]
+						},
+						"description": "**Lưu ý:** API này rất khó để test trực tiếp trên Postman vì `vnp_SecureHash` cần được tạo ra một cách chính xác. Request này chỉ dùng để mô phỏng cấu trúc URL mà VNPAY sẽ gọi về.\n\nĐể test thực tế, bạn phải tạo đơn hàng VNPAY, thanh toán trên sandbox, và VNPAY sẽ tự động gọi về URL này trên server của bạn."
 					},
 					"response": []
 				}
