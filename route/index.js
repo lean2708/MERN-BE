@@ -23,6 +23,7 @@ const searchProduct = require('../controller/product/searchProduct')
 const filterProductController = require('../controller/product/filterProduct')
 const { forgotPassword, verifyOtp, resetPassword } = require('../controller/user/userForgotPassword')
 const { createAddress, getUserAddresses, deleteAddress, updateAddress } = require('../controller/addressController')
+const { createOrder, getMyOrdersByStatus, getOrderById, cancelOrder, vnpayReturn } = require('../controller/orderController')
 
 
 // auth 
@@ -65,6 +66,14 @@ router.post('/address', authToken, createAddress);
 router.get('/address', authToken, getUserAddresses);
 router.put('/address/:id', authToken, updateAddress);
 router.delete('/address/:id', authToken, deleteAddress);
+
+
+// Order
+router.post('/order', authToken, createOrder);
+router.get('/order/by-status', authToken, getMyOrdersByStatus);
+router.get('/order/:id', authToken, getOrderById);
+router.patch('/order/:id/cancel', authToken, cancelOrder);
+router.get('/order/vnpay_return', vnpayReturn);
 
 
 module.exports = router

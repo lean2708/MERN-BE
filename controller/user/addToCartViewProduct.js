@@ -8,18 +8,14 @@ const addToCartViewProduct = async(req,res)=>{
 
         console.log("Fetch All Cart Item For userId:", currentUser)
 
-        // thay the productId bang du lieu productModel
-        const allProduct = await addToCartModel.find({
-            userId : currentUser
-        });
-        
-
-        const detailItems = await convertCartItems(allProduct);
+        const cartProducts = await addToCartModel.find({
+            userId: userId
+        }).populate('productId');
 
         console.log("Cart details fetched successfully for user:", currentUser);
 
         res.json({
-            data : detailItems,
+            data : cartProducts,
             success : true,
             error : false
         })

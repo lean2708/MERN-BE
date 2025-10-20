@@ -8,11 +8,20 @@ const addToCartController = async (req,res) =>{
 
         console.log("User ", currentUser, "added product ", productId, "to the cart")
 
+        if (!productId) {
+            throw new Error("Provide productId");
+        }
+
+        const product = await productModel.findById(productId);
+        if (!product) {
+            throw new Error("Product not found");
+        }
+
+        // Check exits in cart
         const isProductAvailable = await addToCartModel.findOne({
             productId: productId,
-            userId: currentUser
-        })
-
+            userId: userId
+        });
 
         if(isProductAvailable){
             return  res.json({
@@ -23,14 +32,13 @@ const addToCartController = async (req,res) =>{
         }
 
         const payload = {
-            productId : productId,
-            quantity : 1,
-            userId : currentUser
-        }
+            productId: productId,
+            quantity: 1, 
+            userId: userId
+        };
 
-        const newAddToCart = new addToCartModel(payload)
-
-        const saveProduct = await newAddToCart.save()
+        const newAddToCart = new addToCartModel(payload);
+        const saveProduct = await newAddToCart.save();
 
         console.log("Product ", productId, " added successfully to user ", currentUser, " cart");
 

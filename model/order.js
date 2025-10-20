@@ -13,7 +13,7 @@ const orderSchema = new Schema({
         {
             product: {
                 type: Schema.Types.ObjectId,
-                ref: 'Product',
+                ref: 'product',
                 required: true
             },
             quantity: {
@@ -51,13 +51,13 @@ const orderSchema = new Schema({
     orderStatus: {
         type: String,
         enum: [
-            'pending',     // Chờ xác nhận
-            'processing',  // Đang xử lý
-            'shipped',     // Đã gửi hàng
-            'delivered',   // Đã giao hàng
-            'cancelled'    // Đã hủy
+            'PENDING',     // Chờ xác nhận
+            'PROCESSING',  // Đang xử lý
+            'SHIPPED',     // Đã gửi hàng
+            'DELIVERED',   // Đã giao hàng
+            'CANCELLED'    // Đã hủy
         ],
-        default: 'pending'
+        default: 'PENDING'
     },
     
     

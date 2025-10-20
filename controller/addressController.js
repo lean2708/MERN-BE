@@ -3,12 +3,11 @@ const addressModel = require("../model/address");
 
 const createAddress = async (req, res) => {
     try {
-        // Lấy _id từ token (đã được giải mã bởi middleware)
         const userId = req.userId; 
         const { phone, addressDetail, isDefault } = req.body;
 
         if (!phone || !addressDetail) {
-            return res.status(400).json({ message: "Vui lòng cung cấp SĐT và địa chỉ chi tiết." });
+            return res.status(400).json({ message: "Provide phone and address detail." });
         }
 
         const newAddress = new addressModel({
@@ -18,15 +17,26 @@ const createAddress = async (req, res) => {
             isDefault: isDefault || false
         });
 
-        // Gọi .save() sẽ kích hoạt hook pre('save') trong model của bạn
         const savedAddress = await newAddress.save();
 
         res.status(201).json({
-            message: "Tạo địa chỉ thành công",
-            address: savedAddress
+            data : savedAddress, 
+            success : true,
+            error : false,
+            message : "Address created successfully!"
         });
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
+
+    } catch (err) {
+        console.log("Create Address Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
+        res.json({
+            message : err.message || err,
+            error : true,
+            success : false
+        })
     }
 };
 
@@ -39,9 +49,24 @@ const getUserAddresses = async (req, res) => {
         const addresses = await addressModel.find({ user: userId })
                                             .sort({ isDefault: -1, updatedAt: -1 });
 
-        res.status(200).json(addresses);
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
+        res.status(200).json({
+            data : addresses, 
+            success : true,
+            error : false,
+            message : "Get list address successfully!"
+        });
+
+    } catch (err) {
+        console.log("Get Address Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
+        res.json({
+            message : err.message || err,
+            error : true,
+            success : false
+        })
     }
 };
 
@@ -53,37 +78,45 @@ const updateAddress = async (req, res) => {
         const addressId = req.params.id;
         const { phone, addressDetail, isDefault } = req.body;
 
-        // 1. Tìm địa chỉ bằng ID
         const address = await addressModel.findById(addressId);
 
         if (!address) {
             return res.status(404).json({ message: "Không tìm thấy địa chỉ." });
         }
 
-        // 2. Kiểm tra chính chủ
+        // check address user
         if (address.user.toString() !== userId) {
             return res.status(403).json({ message: "Bạn không có quyền sửa địa chỉ này." });
         }
 
-        // 3. Cập nhật các trường
         address.phone = phone || address.phone;
         address.addressDetail = addressDetail || address.addressDetail;
         
-        // Chỉ cập nhật isDefault nếu nó được truyền lên (kể cả là true hay false)
+        // Chỉ cập nhật isDefault 
         if (isDefault !== undefined) {
             address.isDefault = isDefault;
         }
 
-        // 4. Gọi .save() để kích hoạt hook pre('save')
-        // Đây là bước quan trọng để logic isDefault của bạn hoạt động
         const updatedAddress = await address.save();
 
         res.status(200).json({
-            message: "Cập nhật địa chỉ thành công",
-            address: updatedAddress
+            data : updatedAddress, 
+            success : true,
+            error : false,
+            message : "Update address successfully!"
         });
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
+
+    } catch (err) {
+        console.log("Update Address Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
+        res.json({
+            message : err.message || err,
+            error : true,
+            success : false
+        })
     }
 };
 
@@ -93,22 +126,32 @@ const deleteAddress = async (req, res) => {
         const userId = req.userId; 
         const addressId = req.params.id;
 
-        // Xóa địa chỉ nếu nó tồn tại VÀ thuộc về đúng người dùng
         const deletedAddress = await addressModel.findOneAndDelete({
             _id: addressId,
             user: userId
         });
 
         if (!deletedAddress) {
-            // Bao gồm 2 trường hợp: 
-            // 1. ID địa chỉ không tồn tại
-            // 2. Địa chỉ tồn tại nhưng không phải của user này
-            return res.status(404).json({ message: "Không tìm thấy địa chỉ hoặc bạn không có quyền xóa." });
+            throw new Error("Address not exists");
         }
 
-        res.status(200).json({ message: "Xóa địa chỉ thành công." });
-    } catch (error) {
-        res.status(500).json({ message: "Lỗi máy chủ", error: error.message });
+        res.status(200).json({
+            success : true,
+            error : false,
+            message : "Delete address successfully!"
+        });
+        
+    } catch (err) {
+        console.log("Delete Address Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
+        res.json({
+            message : err.message || err,
+            error : true,
+            success : false
+        })
     }
 };
 
