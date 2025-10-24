@@ -20,6 +20,7 @@ router.post("/forgot-password/reset-password", authController.resetPassword)
 
 // user details
 router.get("/user-details", authToken, userController.getUserDetails)
+router.post("/change-password", authToken, userController.changeMyPassword)
 // admin panel
 router.get("/all-user", authToken, userController.getAllUsers)
 router.post("/update-user", authToken, userController.updateUser)

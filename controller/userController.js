@@ -1,5 +1,6 @@
 const userModel = require("../model/userModel");
 const checkAdminPermission = require("../helpers/permission");
+const bcrypt = require('bcryptjs');
 
 const userController = {
 
@@ -72,7 +73,7 @@ const userController = {
     updateUser: async (req, res) => {
         try {
             const sessionUserId = req.userId; 
-            const { userId, email, name, role } = req.body; 
+            const { userId, email, name, role, gender, dateOfBirth } = req.body;
 
             console.log(`Update request from ${sessionUserId} for target user ${userId}`);
 
@@ -82,6 +83,8 @@ const userController = {
             const payload = {
                 ...(email && { email: email }),
                 ...(name && { name: name }),
+                ...(gender && { gender: gender }), 
+                ...(dateOfBirth && { dateOfBirth: dateOfBirth }), 
             };
 
             let targetUserId = userId; 
@@ -139,7 +142,69 @@ const userController = {
                 success: false
             });
         }
+    },
+
+
+
+    changeMyPassword: async (req, res) => {
+    try {
+        const { currentPassword, newPassword, confirmPassword } = req.body;
+        const userId = req.userId; 
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            throw new Error("Please fill in all fields.");
+        }
+
+        if (newPassword !== confirmPassword) {
+            throw new Error("New passwords do not match.");
+        }
+
+        // Get user info (including password)
+        const user = await userModel.findById(userId).select('+password');
+        if (!user) {
+            throw new Error("User not found.");
+        }
+
+        // Check current password
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            throw new Error("Incorrect current password.");
+        }
+
+        // Hash the new password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedNewPassword = await bcrypt.hashSync(newPassword, salt);
+
+        // Update the new password
+        user.password = hashedNewPassword;
+        await user.save();
+
+        res.json({
+            message: "Password changed successfully.",
+            success: true,
+            error: false
+        });
+
+    } catch (err) {
+        console.log("ChangePassword Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        res.status(400).json({
+            message: err.message || err,
+            error: true,
+            success: false
+        });
     }
+}
+
+
+
+
+
 };
+
+
+
 
 module.exports = userController;
