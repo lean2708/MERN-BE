@@ -689,6 +689,36 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/D:/Pictures/Image/anh1.jpg"
+								}
+							]
+						},
+						"url": "http://localhost:8080/api/upload-images"
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
