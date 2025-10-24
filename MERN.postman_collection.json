@@ -169,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"userId\" : \"68df3f4d0749bfbe429162ed\",\r\n    \"email\": \"anotheruser@gmail.com\",\r\n    \"name\": \"Another User\",\r\n    \"role\": \"ADMIN\"\r\n}\r\n",
+							"raw": "{\r\n    \"userId\": \"68fba0293ac59c6ef1afbd65\",\r\n    \"name\": \"An B52\",\r\n    \"gender\": \"Nam\",\r\n    \"dateOfBirth\": \"2004-08-27\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,6 +177,30 @@
 							}
 						},
 						"url": "http://localhost:8080/api/update-user"
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\": \"123456\",\r\n    \"newPassword\": \"12345678\",\r\n    \"confirmPassword\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/change-password"
 					},
 					"response": []
 				}
