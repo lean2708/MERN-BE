@@ -8,6 +8,8 @@ const productController = require('../controller/productController')
 const cartController = require('../controller/cartController')
 const authController = require('../controller/authController')
 const userController = require('../controller/userController')
+const multerUpload = require('../middleware/multerUpload');
+const fileController = require('../controller/fileController')
 
 
 // auth 
@@ -59,6 +61,10 @@ router.get('/order/by-status', authToken, getMyOrdersByStatus);
 router.get('/order/:id', authToken, getOrderById);
 router.patch('/order/:id/cancel', authToken, cancelOrder);
 router.get('/order/vnpay_return', vnpayReturn);
+
+
+// File upload
+router.post("/upload-images", authToken, multerUpload, fileController.uploadImages);
 
 
 module.exports = router
