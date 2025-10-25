@@ -10,6 +10,7 @@ const authController = require('../controller/authController')
 const userController = require('../controller/userController')
 const multerUpload = require('../middleware/multerUpload');
 const fileController = require('../controller/fileController')
+const emailController = require('../controller/emailController')
 
 
 // auth 
@@ -68,5 +69,8 @@ router.get("/all-orders", authToken, getAllOrdersForAdmin);
 // File upload
 router.post("/upload-images", authToken, multerUpload, fileController.uploadImages);
 
+
+// Email 
+router.post("/local/send-email", emailController.sendGenericEmail);
 
 module.exports = router

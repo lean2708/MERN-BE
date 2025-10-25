@@ -45,4 +45,7 @@ async function sendOtpForgotPassowrd(toEmail, toName, otp, expiresIn) {
   await sendEmail(toEmail, toName, otp, expiresIn, templateId);
 }
 
-module.exports = { sendOtpForgotPassowrd };
+module.exports = { 
+  sendEmail,
+  sendOtpForgotPassowrd 
+};
