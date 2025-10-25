@@ -203,6 +203,31 @@
 						"url": "http://localhost:8080/api/change-password"
 					},
 					"response": []
+				},
+				{
+					"name": "Update Avatar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/D:/Pictures/Image/anh1.jpg"
+								}
+							]
+						},
+						"url": "http://localhost:8080/api/upload-avatar"
+					},
+					"response": []
 				}
 			]
 		},
@@ -685,6 +710,38 @@
 							]
 						},
 						"description": "**Lưu ý:** API này rất khó để test trực tiếp trên Postman vì `vnp_SecureHash` cần được tạo ra một cách chính xác. Request này chỉ dùng để mô phỏng cấu trúc URL mà VNPAY sẽ gọi về.\n\nĐể test thực tế, bạn phải tạo đơn hàng VNPAY, thanh toán trên sandbox, và VNPAY sẽ tự động gọi về URL này trên server của bạn."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order By Status or All (For Admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/all-orders?status=PENDING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"all-orders"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PENDING"
+								}
+							]
+						}
 					},
 					"response": []
 				}
