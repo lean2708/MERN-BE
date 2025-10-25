@@ -1,15 +1,20 @@
-const userModel = require("../model/userModel")
 
+const userModel = require("../model/userModel");
 
 const checkAdminPermission = async (userId) => {
-    const user = await userModel.findById(userId)
+    try {
+        const user = await userModel.findById(userId);
 
-    // if(user.role !== 'ADMIN'){
-    //     return false
-    // }
+        if (!user || user.role !== 'ADMIN') {
+            return false; 
+        }
 
-    return true
+        return true; 
+
+    } catch (error) {
+        console.error("Permission Check Error:", error.message);
+        return false;
+    }
 }
 
-module.exports = checkAdminPermission
-
+module.exports = checkAdminPermission;

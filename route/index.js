@@ -3,7 +3,7 @@ const router = express.Router()
 
 const authToken = require('../middleware/authToken')
 const { createAddress, getUserAddresses, deleteAddress, updateAddress } = require('../controller/addressController')
-const { createOrder, getMyOrdersByStatus, getOrderById, cancelOrder, vnpayReturn } = require('../controller/orderController')
+const { createOrder, getMyOrdersByStatus, getOrderById, cancelOrder, vnpayReturn, getAllOrdersForAdmin } = require('../controller/orderController')
 const productController = require('../controller/productController')
 const cartController = require('../controller/cartController')
 const authController = require('../controller/authController')
@@ -23,6 +23,7 @@ router.post("/forgot-password/reset-password", authController.resetPassword)
 // user details
 router.get("/user-details", authToken, userController.getUserDetails)
 router.post("/change-password", authToken, userController.changeMyPassword)
+router.post("/upload-avatar", authToken, multerUpload, userController.uploadAvatar)
 // admin panel
 router.get("/all-user", authToken, userController.getAllUsers)
 router.post("/update-user", authToken, userController.updateUser)
@@ -61,6 +62,7 @@ router.get('/order/by-status', authToken, getMyOrdersByStatus);
 router.get('/order/:id', authToken, getOrderById);
 router.patch('/order/:id/cancel', authToken, cancelOrder);
 router.get('/order/vnpay_return', vnpayReturn);
+router.get("/all-orders", authToken, getAllOrdersForAdmin);
 
 
 // File upload

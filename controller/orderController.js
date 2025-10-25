@@ -2,6 +2,7 @@ const orderModel = require('../model/order');
 const addressModel = require('../model/address');
 const vnpayService = require('../service/vnPayService');
 const productModel = require('../model/productModel');
+const checkAdminPermission = require('../helpers/permission');
 
 
 const createOrder = async (req, res) => {
@@ -109,18 +110,23 @@ const getMyOrdersByStatus = async (req, res) => {
             throw new Error("Provide status order");
         }
 
+        const upperStatus = status.toUpperCase();
+
         // Check valid status
         const allowedStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
-        if (!allowedStatuses.includes(status.toUpperCase())) {
+        if (!allowedStatuses.includes(upperStatus.toUpperCase())) {
             throw new Error("Invalid order status");
         }
 
         const orders = await orderModel.find({ 
             user: userId, 
-            orderStatus: status 
-        }).sort({ createdAt: -1 });
+            orderStatus: upperStatus 
+        })
+        .populate('shippingAddress')
+        .populate('orderItems.product', 'productName productImage')
+        .sort({ createdAt: -1 });
 
-        console.log("Fetched", orders.length, "orders with status", status, "for user:", userId);
+        console.log("Fetched", orders.length, "orders with status", upperStatus, "for user:", userId);
 
         res.status(201).json({
             data : orders, 
@@ -299,12 +305,67 @@ const vnpayReturn = async (req, res) => {
 
 
 
+const getAllOrdersForAdmin = async (req, res) => {
+    try {
+        const isAdmin = await checkAdminPermission(req.userId);
+        
+        if (!isAdmin) {
+            throw new Error("Permission denied. Admin access only.");
+        }
+        
+        const { status } = req.query;
+        console.log(`Received Admin ${req.userId} fetching orders. Status filter: ${status}`);
+
+        let filter = {};
+        if (status) {
+            const allowedStatuses = ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
+            const upperStatus = status.toUpperCase();
+            
+            if (!allowedStatuses.includes(upperStatus)) {
+                throw new Error("Invalid order status provided.");
+            }
+            filter.orderStatus = upperStatus;
+        }
+        // Khong co status se lay tat ca don hang
+
+        const orders = await orderModel.find(filter)
+            .populate('user', 'name email')
+            .populate('shippingAddress') 
+            .populate('orderItems.product', 'productName productImage')
+            .sort({ createdAt: -1 });     
+
+        console.log(`Admin fetch successfully. Found ${orders.length} orders.`);
+
+        res.status(200).json({
+            data: orders,
+            success: true,
+            error: false,
+            message: "Successfully fetched all orders for Admin"
+        });
+
+    } catch (err) {
+        console.log("GetAllOrders (Admin) Controller ERROR:", {
+            message: err.message,
+            stack: err.stack
+        });
+        
+        res.json({
+            message: err.message || err,
+            error: true,
+            success: false
+        });
+    }
+};
+
+
+
 
 module.exports = {
     createOrder,
     getMyOrdersByStatus,
     getOrderById,
     cancelOrder,
-    vnpayReturn
+    vnpayReturn,
+    getAllOrdersForAdmin
 };
 

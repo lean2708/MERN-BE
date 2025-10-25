@@ -1,6 +1,7 @@
 const userModel = require("../model/userModel");
 const checkAdminPermission = require("../helpers/permission");
 const bcrypt = require('bcryptjs');
+const { uploadToCloudinary } = require("../service/fileService");
 
 const userController = {
 
@@ -195,9 +196,69 @@ const userController = {
             error: true,
             success: false
         });
-    }
-}
+    }},
 
+
+
+
+
+
+ 
+    uploadAvatar: async (req, res) => {
+    try {
+      const files = req.files;
+      if (!files || files.length === 0) {
+            throw new Error("No avatar file was uploaded.");
+    }
+
+    if (files.length > 1) {
+        throw new Error("Only one file is allowed for avatar upload.");
+    }
+    
+    const file = files[0];
+
+      console.log(`Received avatar upload request from user: ${req.userId}`);
+      
+      const folder = process.env.CLOUDINARY_FOLDER_NAME || 'MERN';
+      
+      const publicId = `avatars/user-${req.userId}-${Date.now()}`;
+
+      const uploadResult = await uploadToCloudinary(file.buffer, folder, publicId);
+      const imageUrl = uploadResult.secure_url;
+
+      const updatedUser = await userModel.findByIdAndUpdate(
+        req.userId, 
+        { profilePic: imageUrl }, 
+        { new: true } 
+      );
+
+      if (!updatedUser) {
+        throw new Error("User not found, could not update avatar.");
+      }
+
+      console.log("Avatar uploaded and user updated successfully:", updatedUser);
+
+      res.status(200).json({
+        code: 200,
+        message: "Avatar uploaded successfully",
+        data: updatedUser,
+        success: true,
+        error: false
+      });
+
+    } catch (err) {
+      console.error("UploadAvatar Controller ERROR:", {
+        message: err.message,
+        stack: err.stack
+      });
+      
+      res.status(400).json({
+        message: err.message || "An error occurred while uploading avatar",
+        error: true,
+        success: false
+      });
+    }
+  }
 
 
 

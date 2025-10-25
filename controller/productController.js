@@ -8,13 +8,15 @@ const productController = {
     // Create Product
     uploadProduct: async (req, res) => {
         try {
+
+            const isAdmin = await checkAdminPermission(req.userId);
+            if (!isAdmin) {
+              throw new Error("Permission denied. Admin access only.");
+            }
+
             const sessionUserId = req.userId;
 
             console.log("Upload Product request by user:", sessionUserId);
-
-            if (!checkAdminPermission(sessionUserId)) {
-                throw new Error("Permission denied");
-            }
 
             const uploadProduct = new productModel(req.body);
             const saveProduct = await uploadProduct.save();

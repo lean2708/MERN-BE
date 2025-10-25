@@ -1,26 +1,8 @@
 const cloudinary = require('../config/cloudinary');
 const path = require('path');
+const { uploadToCloudinary } = require('../service/fileService');
 
 
-const uploadToCloudinary = (fileBuffer, folder, fileName) => {
-  return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { 
-        folder: folder,
-        public_id: fileName, 
-        resource_type: 'auto' 
-      },
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result);
-        }
-      }
-    );
-    uploadStream.end(fileBuffer);
-  });
-};
 
 
 
