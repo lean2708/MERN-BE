@@ -25,8 +25,8 @@ const createOrder = async (req, res) => {
 
         // check all products exist
         if (productsInDb.length !== productIds.length) {
-            throw Error("Một hoặc nhiều sản phẩm không được tìm thấy trong hệ thống.");
-        }
+            throw Error("One or more products were not found in the system.");
+}
         
         const productMap = new Map(productsInDb.map(p => [p._id.toString(), p]));
 
@@ -50,13 +50,18 @@ const createOrder = async (req, res) => {
             throw Error("Address not found for this user.");
         }
 
+        const upperPaymentMethod = paymentMethod.toUpperCase();
+
+        const initialStatus = upperPaymentMethod === 'CASH' ? 'PROCESSING' : 'PENDING';
+
         // create order
         const order = new orderModel({
             user: userId,
-            orderItems, // Mảng sản phẩm cho DB
+            orderItems,
             shippingAddress: shippingAddressId,
             totalPrice,
-            paymentMethod: paymentMethod.toUpperCase(),
+            paymentMethod: upperPaymentMethod,
+            status: initialStatus
         });
         await order.save();
 
