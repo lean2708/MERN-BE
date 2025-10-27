@@ -59,10 +59,10 @@ router.delete('/address/:id', authToken, deleteAddress);
 
 // Order
 router.post('/order', authToken, createOrder);
+router.get('/order/vnpay-return', vnpayReturn);
 router.get('/order/by-status', authToken, getMyOrdersByStatus);
 router.get('/order/:id', authToken, getOrderById);
 router.patch('/order/:id/cancel', authToken, cancelOrder);
-router.get('/order/vnpay_return', vnpayReturn);
 router.get("/all-orders", authToken, getAllOrdersForAdmin);
 
 
