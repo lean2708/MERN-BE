@@ -61,7 +61,7 @@ const createOrder = async (req, res) => {
             shippingAddress: shippingAddressId,
             totalPrice,
             paymentMethod: upperPaymentMethod,
-            status: initialStatus
+            orderStatus: initialStatus
         });
         await order.save();
 

@@ -39,7 +39,7 @@ const createDefaultAdmin = async () => {
     } catch (error) {
         console.error("Error creating default admin:", error.message);
     }
-};
+}
 
 
 
