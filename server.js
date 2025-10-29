@@ -8,6 +8,7 @@ const router = require('./route/index')
 const swaggerUi = require("swagger-ui-express")
 const swaggerSpec = require("./swagger")
 const { createDefaultAdmin } = require("./service/initService")
+const { initOrderScheduler } = require("./utils/orderScheduler")
 
 
 
@@ -32,6 +33,7 @@ connectDB().then(()=>{
     app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
     createDefaultAdmin();
+    initOrderScheduler();
     });
 })
 

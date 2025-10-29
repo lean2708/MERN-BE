@@ -9,7 +9,7 @@ const reviewController = {
 
     updateProductAverageRating: async (productId) => {
         try {
-            console.log(`Updating average rating for product ${productId} using NodeJS calculation...`);
+            console.log(`Updating average rating for product ${productId}...`);
 
             const reviews = await reviewModel.find({ product: productId }).select('rating');
 
@@ -49,6 +49,8 @@ const reviewController = {
         try {
             const { product, rating, comment, reviewImages } = req.body;
             const userId = req.userId; 
+
+            console.log("Create Review request by user:", userId);
 
             if (!product || !rating) {
                 throw new Error("Product ID and rating are required.");
@@ -96,6 +98,8 @@ const reviewController = {
             // Cập nhật Rating trên Product Model
             await reviewController.updateProductAverageRating(product);
 
+            console.log("Create Review successfully — User-ID:", userId);
+
             res.status(201).json({
                 message: "Review added/updated successfully",
                 error: false,
@@ -125,6 +129,8 @@ const reviewController = {
             
             const { rating, comment, reviewImages } = req.body;
 
+            log.console.log("Update Review request by user:", userId, "for review:", reviewId);
+
             
             const review = await reviewModel.findById(reviewId);
 
@@ -151,6 +157,8 @@ const reviewController = {
             );
 
             await reviewController.updateProductAverageRating(review.product);
+
+            console.log("Update Review successfully — Review ID:", reviewId);
 
             res.json({
                 message: "Review updated successfully",
@@ -180,6 +188,8 @@ const reviewController = {
             const reviewId = req.params.id;
             const userId = req.userId; 
 
+            console.log("Delete Review request by user:", userId, "for review:", reviewId);
+
             const review = await reviewModel.findById(reviewId);
 
             if (!review) {
@@ -196,7 +206,7 @@ const reviewController = {
 
             await reviewController.updateProductAverageRating(productId);
 
-            console.log(`Review ${reviewId} deleted by user ${userId}.`);
+            console.log("Delete Review successfully — Review ID:", reviewId);
 
             res.json({
                 message: "Review deleted successfully",
