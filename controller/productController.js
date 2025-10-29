@@ -277,7 +277,11 @@ const productController = {
                 success: false
             });
         }
-    }
+    },
+
+
+
+    
 };
 
 

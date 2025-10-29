@@ -13,6 +13,14 @@ const productSchema = mongoose.Schema({
         required: true,
         default: 0,
         min: 0 
+    },
+    averageRating: { 
+        type: Number,
+        default: 0
+    },
+    numberOfReviews: { 
+        type: Number,
+        default: 0
     }
     
 },{

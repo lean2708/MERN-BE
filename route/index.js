@@ -11,6 +11,7 @@ const userController = require('../controller/userController')
 const multerUpload = require('../middleware/multerUpload');
 const fileController = require('../controller/fileController')
 const emailController = require('../controller/emailController')
+const reviewController = require('../controller/reviewController')
 
 
 // auth 
@@ -31,15 +32,15 @@ router.post("/update-user", authToken, userController.updateUser)
 
 
 // product 
-router.post("/upload-product", authToken, productController.uploadProduct)
-router.get("/get-product", productController.getAllProducts)
-router.post("/update-product", authToken, productController.updateProduct)
-router.get("/get-categoryProduct", productController.getOneProductPerCategory)
-router.post("/category-product", productController.getCategoryWiseProduct)
-router.post("/product-details", productController.getProductDetails)
-router.get("/search", productController.searchProduct)
-router.post("/filter-product", productController.filterProduct)
-
+router.post("/upload-product", authToken, productController.uploadProduct);
+router.get("/get-product", productController.getAllProducts);
+router.post("/update-product", authToken, productController.updateProduct);
+router.get("/get-categoryProduct", productController.getOneProductPerCategory);
+router.post("/category-product", productController.getCategoryWiseProduct);
+router.post("/product-details", productController.getProductDetails);
+router.get("/search", productController.searchProduct);
+router.post("/filter-product", productController.filterProduct);
+router.get("/review/product/:productId", reviewController.getProductReviews);
 
 
 // user add to cart
@@ -64,6 +65,11 @@ router.get('/order/by-status', authToken, getMyOrdersByStatus);
 router.get('/order/:id', authToken, getOrderById);
 router.put('/order/:id/cancel', authToken, cancelOrder);
 router.get("/all-orders", authToken, getAllOrdersForAdmin);
+
+// Reviews
+router.post("/add-review", authToken, reviewController.addReview)
+router.put("/update-review/:id", authToken, reviewController.updateReview)
+router.delete("/delete-review/:id", authToken, reviewController.deleteReview)
 
 
 // File upload

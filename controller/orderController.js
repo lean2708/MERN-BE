@@ -34,6 +34,10 @@ const createOrder = async (req, res) => {
         let totalPrice = 0;
         const orderItems = products.map(item => {
             const productDetail = productMap.get(item.productId);
+
+            if (productDetail.stock < item.quantity) {
+                throw Error(`Product "${productDetail.productName}" has insufficient stock. Available: ${productDetail.stock}, Requested: ${item.quantity}`);
+            }
             
             const itemPrice = productDetail.sellingPrice * item.quantity;
             totalPrice += itemPrice;
@@ -64,6 +68,17 @@ const createOrder = async (req, res) => {
             orderStatus: initialStatus
         });
         await order.save();
+
+        
+        const updateStockPromises = orderItems.map(item => {
+        return productModel.findByIdAndUpdate(
+                item.product,
+                { $inc: { stock: -item.quantity } }, 
+                { new: true } 
+            );
+        });
+
+        await Promise.all(updateStockPromises);
 
 
         // Create payment URL if payment method is VNPAY
@@ -215,6 +230,16 @@ const cancelOrder = async (req, res) => {
             throw Error(`Cannot cancel order in status '${order.orderStatus}'.`);
         }
 
+        const updateStockPromises = order.orderItems.map(item => {
+            return productModel.findByIdAndUpdate(
+                item.product,
+                { $inc: { stock: item.quantity } }, 
+                { new: true }
+            );
+        });
+        await Promise.all(updateStockPromises);
+
+
         order.orderStatus = 'CANCELLED';
         await order.save();
 
@@ -276,7 +301,20 @@ const vnpayReturn = async (req, res) => {
                     data: updatedOrder
                 });
             } else {
+                const updateStockPromises = order.orderItems.map(item => {
+                    return productModel.findByIdAndUpdate(
+                        item.product,
+                        { $inc: { stock: item.quantity } }, 
+                        { new: true }
+                    );
+                });
+                await Promise.all(updateStockPromises);
+
                 console.log("VNPAY payment successful (already processed):", orderId);
+
+                const updatedOrder = await orderModel.findByIdAndUpdate(orderId, {
+                    orderStatus: 'CANCELLED'
+                }, { new: true });
                 
                 return res.status(200).json({
                     success: false,
