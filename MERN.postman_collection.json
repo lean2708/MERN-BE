@@ -247,7 +247,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"productName\": \"iPhone 15 Pro Max\",\r\n    \"brandName\": \"Apple\",\r\n    \"category\": \"Electronics\",\r\n    \"productImage\": [\r\n        \"https://example.com/images/iphone15promax-front.jpg\",\r\n        \"https://example.com/images/iphone15promax-back.jpg\",\r\n        \"https://example.com/images/iphone15promax-side.jpg\"\r\n    ],\r\n    \"description\": \"iPhone 15 Pro Max với chip A17 Pro mạnh mẽ, camera 48MP, thiết kế titanium sang trọng và cổng USB-C tiện lợi. Trải nghiệm mượt mà và hiệu suất vượt trội.\",\r\n    \"price\": 36990000,\r\n    \"sellingPrice\": 32990000\r\n}\r\n",
+							"raw": "{\r\n  \"productName\": \"Huawei Watch GT 4 46mm - Viền Thép Dây Thép\",\r\n  \"brandName\": \"Huawei\",\r\n  \"category\": \"Watches\",\r\n  \"productImage\": [\r\n    \"https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/t/atum_pro_black_product_image_left_30_en_jpg_20250813_1_.png\",\r\n    \"https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/t/atum_pro_black_product_image_front_en_jpg_20250712_1_.png\",\r\n    \"https://cdn2.cellphones.com.vn/insecure/rs:fill:0:358/q:90/plain/https://cellphones.com.vn/media/catalog/product/a/t/atum_pro_black_product_image_left_en_jpg_20250826_1_.png\"\r\n  ],\r\n  \"description\": \"Thiết kế bát giác mạnh mẽ. Thời lượng pin 14 ngày. Theo dõi calo TruSeen 5.5+. Quản lý sức khỏe 24/7. Tương thích iOS và Android.\",\r\n  \"price\": 5990000,\r\n  \"sellingPrice\": 5490000,\r\n  \"stock\": 25 \r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -280,7 +280,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{   \r\n    \"_id\" : \"68e726c287777366828871db\",\r\n    \"productName\": \"iPhone 18 Pro Max\",\r\n    \"brandName\": \"Apple\",\r\n    \"category\": \"Electronics\",\r\n    \"productImage\": [\r\n        \"https://example.com/images/iphone15promax-front.jpg\",\r\n        \"https://example.com/images/iphone15promax-back.jpg\",\r\n        \"https://example.com/images/iphone15promax-side.jpg\"\r\n    ],\r\n    \"description\": \"iPhone 15 Pro Max với chip A17 Pro mạnh mẽ, camera 48MP, thiết kế titanium sang trọng và cổng USB-C tiện lợi. Trải nghiệm mượt mà và hiệu suất vượt trội.\",\r\n    \"price\": 36990000,\r\n    \"sellingPrice\": 32990000\r\n}\r\n",
+							"raw": "{\r\n    \"_id\": \"6900ca15e0a307c55a742aa8\",\r\n    \"productName\": \"Sony ZV-1 II (ZV-1M2)\",\r\n    \"brandName\": \"Sony\",\r\n    \"category\": \"Camera\",\r\n    \"productImage\": [\r\n        \"https://tokyocamera.vn/wp-content/uploads/2023/06/Sony-ZV-1-II-768x768.jpg\",\r\n        \"https://tokyocamera.vn/wp-content/uploads/2023/06/Sony-ZV-1-II-Digital-Camera-Black-2.jpg\",\r\n        \"https://tokyocamera.vn/wp-content/uploads/2023/06/Sony-ZV-1-II-Digital-Camera-Black-6.jpg\"\r\n    ],\r\n    \"description\": \"Máy ảnh vlogging chuyên dụng. Ống kính zoom góc siêu rộng 18-50mm. Cảm biến 1-inch. Lấy nét Eye AF. Micro 3 capsule thông minh.\",\r\n    \"price\": 22990000,\r\n    \"sellingPrice\": 21490000,\r\n    \"createdAt\": \"2025-10-28T13:50:13.025Z\",\r\n    \"updatedAt\": \"2025-10-29T04:06:31.993Z\",\r\n    \"__v\": 0,\r\n    \"stock\": 150\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -307,7 +307,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"category\": \"Electronics\"\r\n}\r\n",
+							"raw": "{\r\n  \"category\": \"Televisions\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -342,7 +342,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/search?q=iphone",
+							"raw": "http://localhost:8080/api/search?q=iphon",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -355,7 +355,7 @@
 							"query": [
 								{
 									"key": "q",
-									"value": "iphone"
+									"value": "iphon"
 								}
 							]
 						}
@@ -377,6 +377,16 @@
 							}
 						},
 						"url": "http://localhost:8080/api/filter-product"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reviews by Product ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/review/product/6900ce1fe0a307c55a742c0c",
+						"description": "Lấy tất cả đánh giá của một sản phẩm cụ thể. Không cần Auth Token."
 					},
 					"response": []
 				}
@@ -671,7 +681,7 @@
 				{
 					"name": "4. Cancel Order (uses ID from Create)",
 					"request": {
-						"method": "PATCH",
+						"method": "PUT",
 						"header": [],
 						"url": "http://localhost:8080/api/order/68f5a484dbd1db1f8a8565ef/cancel",
 						"description": "Hủy đơn hàng vừa được tạo (chỉ hoạt động khi trạng thái là 'pending'). Hãy chạy request '1. Create New Order' trước."
@@ -687,7 +697,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/order/vnpay_return?vnp_ResponseCode=00&vnp_TxnRef=",
+							"raw": "http://localhost:8080/api/order/vnpay-return?vnp_ResponseCode=00&vnp_TxnRef=68ff3665766350218cbab041",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -696,7 +706,7 @@
 							"path": [
 								"api",
 								"order",
-								"vnpay_return"
+								"vnpay-return"
 							],
 							"query": [
 								{
@@ -705,7 +715,7 @@
 								},
 								{
 									"key": "vnp_TxnRef",
-									"value": ""
+									"value": "68ff3665766350218cbab041"
 								}
 							]
 						},
@@ -772,6 +782,100 @@
 							]
 						},
 						"url": "http://localhost:8080/api/upload-images"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Add Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{authToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product\": \"6900ce1fe0a307c55a742c0c\",\n    \"rating\": 5,\n    \"comment\": \"Sản phẩm chất lượng cao, đúng mô tả. Đã thêm ảnh.\",\n    \"reviewImages\": [\n        \"https://res.cloudinary.com/example/image/upload/v1/review/product_img_a.jpg\",\n        \"https://res.cloudinary.com/example/image/upload/v1/review/product_img_b.jpg\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/add-review",
+						"description": "Thêm mới hoặc cập nhật (nếu đã có) đánh giá sản phẩm. Yêu cầu Auth Token."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": 4,\n    \"comment\": \"Đã giảm 1 sao vì dịch vụ giao hàng chậm. Ảnh mới.\",\n    \"reviewImages\": [\n        \"https://res.cloudinary.com/example/image/upload/v1/review/product_img_c.jpg\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/update-review/65c0c9f1a2b3c4d5e6f7089b",
+						"description": "Cập nhật đánh giá đã tồn tại. Yêu cầu Auth Token và là tác giả của Review."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{TOKEN}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8080/api/delete-review/65c0c9f1a2b3c4d5e6f7089b",
+						"description": "Xóa đánh giá. Yêu cầu Auth Token và là tác giả của Review."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "local",
+			"item": [
+				{
+					"name": "Send Email (Local)",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
